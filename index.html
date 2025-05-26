@@ -454,46 +454,49 @@
             <div class="content-card">
                 <p class="mb-6 leading-relaxed">Penundaan pengesahan RUU PPRT selama hampir dua dekade disebabkan oleh interaksi berbagai faktor kompleks. Bagian ini menguraikan beberapa faktor utama yang diduga menjadi penghambat.</p>
                 
-                <div class="mb-4 flex flex-wrap">
-                    <button class="tab-button active" data-tab="ekonomi"> Ekonomi</button>
-                    <button class="tab-button" data-tab="politik"> Politik</button>
-                    <button class="tab-button" data-tab="internasional"> Internasional</button>
-                </div>
-
-                <div id="ekonomi" class="tab-content">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Minimnya *Multiplier Effect* yang Dirasakan atau Dikhawatirkan?</h3>
-                    <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
-                        <li>Persepsi bahwa formalisasi PRT akan menimbulkan biaya signifikan bagi rumah tangga pemberi kerja.</li>
-                        <li>Pekerjaan PRT sering tidak dilihat sebagai sektor produktif yang menghasilkan nilai tambah langsung ke PDB.</li>
-                        <li>Kekhawatiran RUU tidak memberikan *multiplier effect* sebanding investasi lain.</li>
-                        <li><strong>Argumen Tandingan:</strong> Peningkatan daya beli PRT (MPC tinggi), peningkatan profesionalisme PRT, kontribusi vital pada *care economy*, potensi pengurangan beban fiskal negara melalui jaminan sosial.</li>
-                        <li>Ketakutan akan "biaya" langsung mungkin mengaburkan manfaat jangka panjang.</li>
-                    </ul>
-                </div>
-
-                <div id="politik" class="tab-content hidden">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Defisit Mobilisasi Massa dan Tekanan Publik, atau Resistensi Elit?</h3>
-                    <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
-                        <li>Kurangnya *political will* dari pimpinan dan sebagian anggota DPR.</li>
-                        <li>Dugaan konflik kepentingan (anggota DPR sebagai pemberi kerja).</li>
-                        <li>Prioritas politik yang berbeda (RUU lain seperti IKN, Minerba, lebih cepat disahkan).</li>
-                        <li>Meskipun ada tekanan publik dari masyarakat sipil, belum cukup mengatasi resistensi politik dan kultural.</li>
-                        <li>Potensi "politik pengabaian" (*politics of neglect*) terhadap isu kelompok marginal.</li>
-                    </ul>
-                    <div class="chart-container mt-6">
-                        <canvas id="ruuComparisonChart"></canvas>
+                <div id="accordion-faktor" class="space-y-2">
+                    <div>
+                        <button class="accordion-button" data-target="faktor-ekonomi"><span> Faktor Ekonomi</span><span class="icon"></span></button>
+                        <div id="faktor-ekonomi" class="accordion-content">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Minimnya *Multiplier Effect* yang Dirasakan atau Dikhawatirkan?</h3>
+                            <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
+                                <li>Persepsi bahwa formalisasi PRT akan menimbulkan biaya signifikan bagi rumah tangga pemberi kerja.</li>
+                                <li>Pekerjaan PRT sering tidak dilihat sebagai sektor produktif yang menghasilkan nilai tambah langsung ke PDB.</li>
+                                <li>Kekhawatiran RUU tidak memberikan *multiplier effect* sebanding investasi lain.</li>
+                                <li><strong>Argumen Tandingan:</strong> Peningkatan daya beli PRT (MPC tinggi), peningkatan profesionalisme PRT, kontribusi vital pada *care economy*, potensi pengurangan beban fiskal negara melalui jaminan sosial.</li>
+                                <li>Ketakutan akan "biaya" langsung mungkin mengaburkan manfaat jangka panjang.</li>
+                            </ul>
+                        </div>
                     </div>
-                     <p class="text-center text-sm text-gray-600 mt-2">Diagram Ilustratif: Perbandingan Estimasi Waktu Pembahasan RUU.</p>
-                </div>
-
-                <div id="internasional" class="tab-content hidden">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Minimnya Dorongan Global yang Efektif?</h3>
-                    <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
-                        <li>Dorongan dari ILO (Konvensi 189), HRW, Amnesty International, dan mekanisme HAM PBB.</li>
-                        <li>Indonesia belum meratifikasi Konvensi ILO No. 189.</li>
-                        <li>Dorongan internasional bersifat normatif dan reputasional, daya paksa terbatas jika berhadapan dengan kepentingan domestik kuat.</li>
-                        <li>Paradoks: Vokal menuntut perlindungan TKI PRT di luar negeri, lamban melindungi PRT di dalam negeri. Ketiadaan UU PPRT melemahkan posisi tawar Indonesia.</li>
-                    </ul>
+                    <div>
+                        <button class="accordion-button" data-target="faktor-politik"><span>🏛 Faktor Politik</span><span class="icon"></span></button>
+                        <div id="faktor-politik" class="accordion-content">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Defisit Mobilisasi Massa dan Tekanan Publik, atau Resistensi Elit?</h3>
+                            <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
+                                <li>Kurangnya *political will* dari pimpinan dan sebagian anggota DPR.</li>
+                                <li>Dugaan konflik kepentingan (anggota DPR sebagai pemberi kerja).</li>
+                                <li>Prioritas politik yang berbeda (RUU lain seperti IKN, Minerba, lebih cepat disahkan).</li>
+                                <li>Meskipun ada tekanan publik dari masyarakat sipil, belum cukup mengatasi resistensi politik dan kultural.</li>
+                                <li>Potensi "politik pengabaian" (*politics of neglect*) terhadap isu kelompok marginal.</li>
+                            </ul>
+                            <div class="chart-container mt-6">
+                                <canvas id="ruuComparisonChart"></canvas>
+                            </div>
+                             <p class="text-center text-sm text-gray-600 mt-2">Diagram Ilustratif: Perbandingan Estimasi Waktu Pembahasan RUU.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="accordion-button" data-target="faktor-internasional"><span> Faktor Internasional</span><span class="icon"></span></button>
+                        <div id="faktor-internasional" class="accordion-content">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Minimnya Dorongan Global yang Efektif?</h3>
+                            <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
+                                <li>Dorongan dari ILO (Konvensi 189), HRW, Amnesty International, dan mekanisme HAM PBB.</li>
+                                <li>Indonesia belum meratifikasi Konvensi ILO No. 189.</li>
+                                <li>Dorongan internasional bersifat normatif dan reputasional, daya paksa terbatas jika berhadapan dengan kepentingan domestik kuat.</li>
+                                <li>Paradoks: Vokal menuntut perlindungan TKI PRT di luar negeri, lamban melindungi PRT di dalam negeri. Ketiadaan UU PPRT melemahkan posisi tawar Indonesia.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
