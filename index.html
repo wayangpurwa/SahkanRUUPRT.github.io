@@ -96,7 +96,7 @@
             background-color: #265073; /* Biru baru */
             color: white;
             border-color: #265073; /* Biru baru */
-            box-shadow: 0 2px 5px -1px rgba(38, 80, 115, 0.3); /* Disesuaikan dengan biru baru */
+            box-shadow: 0 2px 5px -1px rgba(38, 80, 115, 0.3); 
         }
         .accordion-button {
             background-color: #ededed; 
@@ -130,7 +130,7 @@
         }
         .accordion-content {
             padding: 1.25rem; 
-            background-color: #F6F6F6; /* Latar F6F6F6 */
+            background-color: #F6F6F6; 
             border: 1px solid #dcdcdc; 
             border-top: none;
             border-radius: 0 0 0.5rem 0.5rem; 
@@ -139,14 +139,14 @@
             margin-bottom: 0.5rem; 
         }
         .highlight-stat {
-            background-color: #ECF4D6; /* Kuning baru */
-            color: #4A5C3D; /* Warna teks disesuaikan untuk kontras dengan kuning baru */
+            background-color: #ECF4D6; 
+            color: #4A5C3D; 
             padding: 1.25rem; 
             border-radius: 0.75rem; 
             text-align: center;
             font-size: 1.125rem; 
             font-weight: 600; 
-            border: 1px solid #D9E7C6; /* Border disesuaikan dengan kuning baru */
+            border: 1px solid #D9E7C6; 
         }
         .footer-text {
             color: #d1d5db; 
@@ -217,27 +217,28 @@
             color: #265073; /* Biru baru */
             font-weight: 700; 
         }
-        .image-gallery img {
-            aspect-ratio: 4 / 3; 
-            object-fit: cover; 
-            border-radius: 0.75rem; 
-            box-shadow: 0 4px 12px -1px rgba(0,0,0,0.07), 0 2px 8px -2px rgba(0,0,0,0.04);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        /* Slider Styles */
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.3); /* Titik lebih gelap agar terlihat di latar F6F6F6 */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        .image-gallery img:hover {
-            transform: scale(1.03);
-            box-shadow: 0 8px 20px -3px rgba(0,0,0,0.1), 0 4px 12px -4px rgba(0,0,0,0.08);
+        .slider-dot.active {
+            background-color: #265073; /* Biru baru untuk dot aktif */
         }
-        /* Responsive YouTube Embed */
+         /* Responsive YouTube Embed (jika digunakan di halaman lain) */
         .video-responsive-container {
             overflow: hidden;
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            border-radius: 0.75rem; /* rounded-xl */
+            padding-top: 56.25%; 
+            border-radius: 0.75rem; 
             box-shadow: 0 4px 12px -1px rgba(0,0,0,0.07), 0 2px 8px -2px rgba(0,0,0,0.04);
-            margin-top: 1.5rem; /* mt-6 */
-            margin-bottom: 1.5rem; /* mb-6 */
+            margin-top: 1.5rem; 
+            margin-bottom: 1.5rem; 
         }
         .video-responsive-container iframe {
             position: absolute;
@@ -255,8 +256,8 @@
 
     <header style="background-color: #265073;" class="text-white shadow-lg">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
-            <h1 class="text-3xl sm:text-4xl font-bold">Sahkan RUU PPRT</h1>
-            <p class="mt-2 text-md sm:text-lg">Mengurai Perjuangan, Tantangan, dan Urgensi Perlindungan PRT</p>
+            <h1 class="text-3xl sm:text-4xl font-bold">Sahkan RUU PPRT Sekarang!</h1>
+            <p class="mt-2 text-md sm:text-lg">Wujudkan Keadilan dan Perlindungan bagi Pekerja Rumah Tangga Indonesia.</p>
         </div>
     </header>
 
@@ -272,10 +273,11 @@
                         </svg>
                     </button>
                 </div>
-                <div id="mainNavLinks" class="hidden md:flex md:items-center md:space-x-2 mx-auto"> <a href="#beranda" class="nav-link active">🏠 Beranda</a>
+                <div id="mainNavLinks" class="hidden md:flex md:items-center md:space-x-2 mx-auto"> 
+                    <a href="#beranda" class="nav-link active"> Beranda</a>
                     <a href="#mengapa-mendesak" class="nav-link"> Urgensi</a>
                     <a href="#suara-perjuangan" class="nav-link"> Perjuangan</a>
-                    <a href="#ruu-pprt" class="nav-link"> Substansi RUU </a>
+                    <a href="#ruu-pprt" class="nav-link"> Substansi</a>
                     <a href="#faktor-penghambat" class="nav-link"> Hambatan</a>
                     <a href="#dampak-penundaan" class="nav-link"> Dampak</a>
                     <a href="#kesimpulan-rekomendasi" class="nav-link"> Simpulan</a>
@@ -296,17 +298,38 @@
                     RUU PPRT bukan hanya tentang mereka, tapi tentang <span class="campaign-highlight">KITA</span>. Tentang nilai kemanusiaan, keadilan, dan martabat bangsa.
                 </p>
 
-                <div class="my-8 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 image-gallery">
-                    <div>
-                        <img src="https://www.amnesty.id/wp-content/uploads/2025/03/signal-2025-02-19-141134_003-1024x768.jpeg" alt="Aksi dukungan pengesahan RUU PPRT oleh Amnesty International" class="w-full h-auto">
-                        <p class="text-xs text-center text-gray-500 mt-1">Aksi dukungan RUU PPRT. Sumber: Amnesty.id</p>
+                <div class="relative w-full max-w-2xl mx-auto my-8" id="imageSliderContainer">
+                    <div class="overflow-hidden relative h-64 sm:h-72 md:h-96 rounded-xl shadow-lg">
+                        <div class="flex transition-transform duration-700 ease-in-out h-full" id="slider">
+                            <div class="w-full flex-shrink-0 h-full">
+                                <img src="https://foto.kontan.co.id/LQA0ydedi2FwXg6fo20lswuQr9M=/smart/2023/02/15/920377857.jpg" alt="Aksi advokasi RUU PPRT" class="w-full h-full object-cover">
+                            </div>
+                            <div class="w-full flex-shrink-0 h-full">
+                                <img src="https://asset.kompas.com/crops/WmPHUD6jBj6s0oE_6PtVVcq0W3g=/0x0:0x0/1200x800/data/photo/2024/09/10/66dfc5d6b0cda.jpg" alt="Liputan media terkait RUU PPRT" class="w-full h-full object-cover">
+                            </div>
+                            <div class="w-full flex-shrink-0 h-full">
+                                <img src="https://c.inilah.com/2022/12/1221_015629_331c_inilah.com_-1024x683.jpg" alt="Demonstrasi mendukung RUU PPRT dengan spanduk" class="w-full h-full object-cover">
+                            </div>
+                            <div class="w-full flex-shrink-0 h-full">
+                                <img src="https://cdn.antaranews.com/cache/1200x800/2023/02/01/antarafoto-aksi-tuntut-pengesahan-ruu-pprt-01022023-gp-5.jpg" alt="Aksi massa menuntut pengesahan RUU PPRT" class="w-full h-full object-cover">
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <img src="https://img.antarafoto.com/cache/1200x801/2011/12/12/ruu-perlindungan-prt-405k-dom.webp" alt="Demonstrasi mendesak pengesahan RUU Perlindungan PRT" class="w-full h-auto">
-                        <p class="text-xs text-center text-gray-500 mt-1">Demonstrasi untuk RUU PPRT. Sumber: Antara Foto</p>
-                    </div>
+
+                    <button id="prevSlide" class="absolute top-1/2 left-1 sm:left-2 transform -translate-y-1/2 bg-black bg-opacity-30 text-white p-2 rounded-full hover:bg-opacity-50 transition-opacity focus:outline-none z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button id="nextSlide" class="absolute top-1/2 right-1 sm:right-2 transform -translate-y-1/2 bg-black bg-opacity-30 text-white p-2 rounded-full hover:bg-opacity-50 transition-opacity focus:outline-none z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    <div class="absolute bottom-3 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10" id="sliderDots">
+                        </div>
                 </div>
-                
                 <p class="campaign-text font-semibold mb-8">
                     Jangan biarkan perjuangan mereka sia-sia. <span class="campaign-highlight">Dukung dan Kawal Pengesahan RUU PPRT Sekarang!</span> Suara Anda berarti.
                 </p>
@@ -324,17 +347,18 @@
         <section id="suara-perjuangan" class="content-section hidden">
             <h2 class="section-title">Suara Perjuangan PRT dan Aktivis</h2>
             <div class="content-card">
-                <p class="mb-4 leading-relaxed">Bagian ini mengangkat narasi perjuangan tak kenal lelah para PRT dan aktivis hak asasi manusia dalam menuntut pengesahan RUU PPRT, sebagaimana tergambar dalam video "Mengejar Mbak Puan" dan berbagai laporan. Perjuangan ini telah berlangsung hampir dua dekade, menunjukkan ketahanan dan harapan yang luar biasa.</p>
-                    <div class="video-responsive-container">
-                    <iframe width="560" 
-                    height="315" 
-                    src="https://www.youtube.com/embed/vTNLRCEUr8c?si=LpZV1WTOrfywcej6" title="YouTube video player" 
-                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    referrerpolicy="strict-origin-when-cross-origin" 
-                    allowfullscreen></iframe>
-
+                <p class="mb-4 leading-relaxed">Bagian ini mengangkat narasi perjuangan tak kenal lelah para PRT dan aktivis hak asasi manusia dalam menuntut pengesahan RUU PPRT. Perjuangan ini telah berlangsung hampir dua dekade, menunjukkan ketahanan dan harapan yang luar biasa.</p>
+                
+                <div class="video-responsive-container">
+                    <iframe
+                        src="https://t0.gstatic.com/faviconV2?url=https://www.youtube.com/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL" 
+                        title="Video Perjuangan RUU PPRT"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
                 </div>
-                <p class="text-center text-sm text-gray-600 mb-6">Film Mengejar Mbak Puan oleh Konde Institute</p>
+                <p class="text-center text-sm text-gray-600 mb-6">Catatan: Ganti 'VIDEO_ID_ANDA' dalam kode dengan ID video YouTube yang relevan.</p>
 
                 <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Aksi dan Advokasi (Contoh dari Laporan):</h3>
                 <ul class="list-disc list-inside space-y-2 mb-4 pl-2 leading-relaxed">
@@ -354,10 +378,7 @@
                     <li>Risiko kehilangan pekerjaan bagi PRT yang aktif bersuara.</li>
                     <li>"Kelelahan advokasi" (*advocacy fatigue*).</li>
                 </ul>
-                <p class="italic leading-relaxed mt-4">"19 tahun itu menuntut stamina hati bagaimana kita harus terus mumpuk harapan bahwa satu saat itu akan terjadi undang-undang itu akan ada..."
-                    <p> - Kutipan dari Film "Mengejar Mbak Puan"
-
-                </p>
+                <p class="italic leading-relaxed mt-4">"19 tahun itu menuntut stamina hati bagaimana kita harus terus mumpuk harapan bahwa satu saat itu akan terjadi undang-undang itu akan ada..."</p>
             </div>
         </section>
 
@@ -579,7 +600,9 @@
             <p class="text-lg font-semibold text-white mb-2">Sahkan RUU PRT!</p>
             <p class="text-sm footer-text">Dalam Rangka Memenuhi Penugasan Matkul Hukum Perburuhan.</p>
             <p class="text-sm footer-text mb-1">Dosen: Syahrul Sajidin, S.H., M.H.</p>
-            <p class="text-xs footer-text mt-4">By Deva A. Supardi</p>        </div>
+            <p class="text-xs footer-text mt-4">By Deva A. Supardi</p>
+            <p class="text-xs footer-text">Referensi desain terinspirasi oleh <a href="https://aksibersama.or.id/" target="_blank" rel="noopener noreferrer" class="footer-link">AksiBersama.or.id</a></p>
+        </div>
     </footer>
 
     <script>
@@ -655,6 +678,92 @@
                 });
             });
 
+            // Image Slider
+            const slider = document.getElementById('slider');
+            if (slider) {
+                const slides = slider.children;
+                const totalSlides = slides.length;
+                const prevButton = document.getElementById('prevSlide');
+                const nextButton = document.getElementById('nextSlide');
+                const dotsContainer = document.getElementById('sliderDots');
+                let currentIndex = 0;
+                let autoSlideInterval;
+
+                if (dotsContainer) {
+                    for (let i = 0; i < totalSlides; i++) {
+                        const dot = document.createElement('button');
+                        dot.classList.add('slider-dot');
+                        dot.addEventListener('click', () => {
+                            goToSlide(i);
+                            resetAutoSlide();
+                        });
+                        dotsContainer.appendChild(dot);
+                    }
+                }
+                const dots = dotsContainer ? dotsContainer.children : [];
+
+                function updateSliderPosition() {
+                    slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    if (dots.length > 0) {
+                        Array.from(dots).forEach((dot, index) => {
+                            dot.classList.toggle('active', index === currentIndex);
+                        });
+                    }
+                }
+
+                function goToSlide(index) {
+                    currentIndex = index;
+                    updateSliderPosition();
+                }
+
+                function next() {
+                    currentIndex = (currentIndex + 1) % totalSlides;
+                    updateSliderPosition();
+                }
+
+                function prev() {
+                    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                    updateSliderPosition();
+                }
+
+                if (prevButton && nextButton) {
+                    prevButton.addEventListener('click', () => {
+                        prev();
+                        resetAutoSlide();
+                    });
+                    nextButton.addEventListener('click', () => {
+                        next();
+                        resetAutoSlide();
+                    });
+                }
+
+                function startAutoSlide(interval = 5000) {
+                    if (totalSlides > 1) {
+                       autoSlideInterval = setInterval(next, interval);
+                    }
+                }
+
+                function stopAutoSlide() {
+                    clearInterval(autoSlideInterval);
+                }
+
+                function resetAutoSlide() {
+                    stopAutoSlide();
+                    startAutoSlide();
+                }
+                
+                if (totalSlides > 0) {
+                    updateSliderPosition();
+                    startAutoSlide();
+                    const sliderContainer = document.getElementById('imageSliderContainer');
+                    if (sliderContainer) {
+                        sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+                        sliderContainer.addEventListener('mouseleave', startAutoSlide);
+                    }
+                }
+            }
+
+
             // Chart.js Implementations
             const baseChartOptions = {
                 responsive: true,
@@ -714,7 +823,6 @@
             };
             
             const doughnutChartOptions = JSON.parse(JSON.stringify(baseChartOptions)); 
-            // delete doughnutChartOptions.scales; // Doughnut charts don't use scales
 
             const prtDemographicsCtx = document.getElementById('prtDemographicsChart');
             if (prtDemographicsCtx) {
@@ -727,8 +835,8 @@
                         datasets: [{
                             label: 'Jumlah Jiwa',
                             data: [1714437, 202235],
-                            backgroundColor: ['rgba(38, 80, 115, 0.7)', 'rgba(239, 68, 68, 0.7)'], /* New Blue, Red */
-                            borderColor: ['#265073', '#dc2626'], /* New Blue, Red */
+                            backgroundColor: ['rgba(38, 80, 115, 0.7)', 'rgba(239, 68, 68, 0.7)'], 
+                            borderColor: ['#265073', '#dc2626'], 
                             borderWidth: 1.5,
                             borderRadius: 4
                         }]
@@ -773,8 +881,8 @@
                         datasets: [{
                             label: 'Komposisi Gender PRT',
                             data: [90, 10], 
-                            backgroundColor: ['rgba(236, 72, 153, 0.7)', 'rgba(38, 80, 115, 0.7)'], /* Pink, New Blue */
-                            borderColor: ['#db2777', '#265073'], /* Pink, New Blue */
+                            backgroundColor: ['rgba(236, 72, 153, 0.7)', 'rgba(38, 80, 115, 0.7)'], 
+                            borderColor: ['#db2777', '#265073'], 
                             borderWidth: 1.5,
                             hoverOffset: 8
                         }]
