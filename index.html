@@ -6,119 +6,251 @@
     <title>Analisis Interaktif RUU PPRT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Visualization & Content Choices:
-        - Info Laporan: Jumlah PRT & PRTA (Data BPS 2008 dari teks laporan Bagian 1 & 5) -> Tujuan: Menunjukkan skala pekerja anak -> Visualisasi: Diagram Batang (Chart.js) -> Interaksi: Statis -> Justifikasi: Visualisasi perbandingan yang jelas -> Pustaka: Chart.js.
-        - Info Laporan: Perbandingan waktu pembahasan RUU PPRT vs RUU lain (Konsep dari teks laporan Bagian 4.2) -> Tujuan: Menyoroti kelambatan politik -> Visualisasi: Diagram Batang Ilustratif (Chart.js) -> Interaksi: Statis -> Justifikasi: Perbandingan visual durasi -> Pustaka: Chart.js.
-        - Info Laporan: Komposisi gender PRT (90% perempuan dari teks laporan Bagian 1 & 5) -> Tujuan: Menekankan dampak gender -> Visualisasi: Diagram Donat (Chart.js) -> Interaksi: Statis -> Justifikasi: Pemahaman cepat proporsi -> Pustaka: Chart.js.
-        - Info Laporan: Bentuk eksploitasi, poin-poin RUU, faktor penghambat, dampak -> Tujuan: Menginformasikan & Mengorganisir -> Presentasi: Daftar terstruktur HTML, tata letak dua kolom, akordeon/tab -> Interaksi: Klik untuk detail, navigasi tab -> Justifikasi: Memecah teks padat, bacaan terfokus -> Pustaka/Metode: HTML/CSS/JS.
+    <!-- Visualization & Content Choices: Visualisasi data (Chart.js) dan pilihan konten tetap sama. Perubahan difokuskan pada presentasi visual dan interaksi yang lebih responsif. Penggunaan daftar terstruktur, akordeon, dan tab dioptimalkan untuk keterbacaan di berbagai ukuran layar.
+        - Info Laporan: Jumlah PRT & PRTA -> Visualisasi: Diagram Batang (Chart.js).
+        - Info Laporan: Perbandingan waktu pembahasan RUU -> Visualisasi: Diagram Batang Ilustratif (Chart.js).
+        - Info Laporan: Komposisi gender PRT -> Visualisasi: Diagram Donat (Chart.js).
+        - Info Laporan: Bentuk eksploitasi, poin RUU, faktor penghambat, dampak -> Presentasi: Daftar terstruktur HTML, tata letak responsif, akordeon/tab yang dioptimalkan.
         - CONFIRMING NO SVG/Mermaid. -->
     <style>
-        body { font-family: 'Inter', sans-serif; } /* Menggunakan font Inter seperti yang disarankan */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 600px; /* Batas lebar maksimum untuk keterbacaan */
+            max-width: 550px; 
             margin-left: auto;
             margin-right: auto;
-            height: 300px; /* Tinggi dasar, bisa disesuaikan dengan Tailwind atau media queries */
-            max-height: 400px; /* Batas tinggi maksimum */
+            height: 280px; 
+            max-height: 350px;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 640px) { /* sm breakpoint */
             .chart-container {
-                height: 350px;
+                height: 320px;
             }
         }
-        .nav-link {
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        @media (min-width: 768px) { /* md breakpoint */
+            .chart-container {
+                height: 350px;
+                max-width: 600px;
+            }
         }
-        .nav-link:hover, .nav-link.active {
-            background-color: #0284c7; /* sky-600 */
+
+        .nav-link {
+            padding: 0.625rem 1rem; /* 10px 16px */
+            border-radius: 0.375rem; /* rounded-md */
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            font-weight: 500; /* medium */
+            display: block; /* Untuk tumpukan di mobile */
+        }
+        .nav-link:hover {
+            background-color: #3b82f6; /* blue-500 */
             color: white;
+            transform: translateY(-1px);
+        }
+        .nav-link.active {
+            background-color: #2563eb; /* blue-600 */
+            color: white;
+            font-weight: 600; /* semibold */
         }
         .section-title {
-            font-size: 1.875rem; /* text-3xl */
+            font-size: 1.75rem; /* text-2xl */
             font-weight: 700; /* font-bold */
-            color: #1e293b; /* slate-800 */
+            color: #1f2937; /* gray-800 */
             margin-bottom: 1.5rem; /* mb-6 */
-            border-bottom: 2px solid #0ea5e9; /* sky-500 */
-            padding-bottom: 0.5rem; /* pb-2 */
+            padding-bottom: 0.75rem; /* pb-3 */
+            border-bottom: 3px solid #3b82f6; /* blue-500 */
+        }
+         @media (min-width: 768px) {
+            .section-title {
+                font-size: 2rem; /* text-3xl for md and up */
+            }
         }
         .content-card {
             background-color: white;
-            border-radius: 0.5rem; /* rounded-lg */
-            padding: 1.5rem; /* p-6 */
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
+            border-radius: 0.75rem; /* rounded-xl, lebih luwes */
+            padding: 1.25rem; /* p-5 */
+            box-shadow: 0 4px 12px -1px rgba(0,0,0,0.07), 0 2px 8px -2px rgba(0,0,0,0.04); /* shadow-lg yang lebih lembut */
             margin-bottom: 1.5rem; /* mb-6 */
         }
-        .tab-button {
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            margin-right: 0.5rem;
-            cursor: pointer;
-            background-color: #e2e8f0; /* slate-200 */
-            color: #334155; /* slate-700 */
-            transition: background-color 0.2s ease-in-out;
+         @media (min-width: 768px) {
+            .content-card {
+                padding: 2rem; /* p-8 for md and up */
+            }
         }
-        .tab-button:hover, .tab-button.active {
-            background-color: #0ea5e9; /* sky-500 */
+        .tab-button {
+            padding: 0.625rem 1.25rem; /* py-2.5 px-5 */
+            border-radius: 0.5rem; /* rounded-lg */
+            margin-right: 0.5rem; /* mr-2 */
+            margin-bottom: 0.5rem; /* mb-2 for wrapping */
+            cursor: pointer;
+            background-color: #f3f4f6; /* gray-100 */
+            color: #374151; /* gray-700 */
+            font-weight: 500;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 1px solid #e5e7eb; /* gray-200 */
+        }
+        .tab-button:hover {
+            background-color: #e5e7eb; /* gray-200 */
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05);
+        }
+        .tab-button.active {
+            background-color: #2563eb; /* blue-600 */
             color: white;
+            border-color: #2563eb; /* blue-600 */
+            box-shadow: 0 2px 5px -1px rgba(37, 99, 235, 0.3);
         }
         .accordion-button {
-            background-color: #f1f5f9; /* slate-100 */
-            color: #1e293b; /* slate-800 */
-            padding: 1rem;
+            background-color: #f9fafb; /* gray-50 */
+            color: #1f2937; /* gray-800 */
+            padding: 1rem 1.25rem; /* p-4 px-5 */
             width: 100%;
             text-align: left;
-            border: none;
-            border-radius: 0.375rem;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 0.5rem; /* rounded-lg */
             cursor: pointer;
-            transition: background-color 0.2s;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            font-weight: 600; /* semibold */
+            margin-bottom: 0.5rem; /* mb-2 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .accordion-button:hover {
-            background-color: #e2e8f0; /* slate-200 */
+            background-color: #f3f4f6; /* gray-100 */
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
+        }
+        .accordion-button .icon::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: #6b7280; /* gray-500 */
+            transition: transform 0.3s ease-out;
+        }
+        .accordion-button.open .icon::after {
+            content: '-';
+            transform: rotate(180deg);
         }
         .accordion-content {
-            padding: 1rem;
+            padding: 1.25rem; /* p-5 */
             background-color: white;
-            border: 1px solid #e2e8f0; /* slate-200 */
+            border: 1px solid #e5e7eb; /* gray-200 */
             border-top: none;
-            border-radius: 0 0 0.375rem 0.375rem;
-            display: none; /* Default hidden */
+            border-radius: 0 0 0.5rem 0.5rem; /* rounded-b-lg */
+            display: none; 
+            margin-top: -0.5rem; /* to connect with button */
+            margin-bottom: 0.5rem; /* mb-2 */
         }
         .highlight-stat {
-            background-color: #ecfccb; /* lime-100 */
-            color: #3f6212; /* lime-800 */
-            padding: 1rem;
-            border-radius: 0.5rem;
+            background-color: #fef3c7; /* amber-100 */
+            color: #78350f; /* amber-800 */
+            padding: 1.25rem; /* p-5 */
+            border-radius: 0.75rem; /* rounded-xl */
             text-align: center;
             font-size: 1.125rem; /* text-lg */
-            font-weight: 600;
+            font-weight: 600; /* semibold */
+            border: 1px solid #fde68a; /* amber-300 */
+        }
+        .footer-text {
+            color: #d1d5db; /* gray-300 */
+        }
+        .footer-link {
+            color: #f59e0b; /* amber-500 */
+            text-decoration: underline;
+        }
+        .footer-link:hover {
+            color: #fcd34d; /* amber-300 */
+        }
+
+        /* Mobile Nav Specific */
+        #mobileMenuButton {
+            display: none; /* Hidden by default */
+        }
+        #mainNavLinks {
+            display: flex; /* Default for larger screens */
+        }
+
+        @media (max-width: 767px) { /* md breakpoint and below */
+            #mobileMenuButton {
+                display: block; /* Show on mobile */
+                padding: 0.5rem;
+                border-radius: 0.375rem;
+                background-color: transparent;
+                color: #1f2937; /* gray-800 */
+            }
+            #mobileMenuButton:hover {
+                background-color: #f3f4f6; /* gray-100 */
+            }
+             #mainNavLinks {
+                display: none; /* Hide on mobile by default */
+                flex-direction: column;
+                width: 100%;
+                background-color: white;
+                position: absolute;
+                top: 100%; /* Position below the nav bar */
+                left: 0;
+                right: 0;
+                z-index: 40; /* Below sticky nav (z-50) but above content */
+                padding: 0.5rem 0;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            }
+            #mainNavLinks.open {
+                display: flex; /* Show when menu is open */
+            }
+            .nav-link {
+                padding: 0.75rem 1.5rem; /* py-3 px-6 for mobile */
+                text-align: left;
+                border-bottom: 1px solid #f3f4f6; /* gray-100 */
+            }
+            .nav-link:last-child {
+                border-bottom: none;
+            }
+        }
+        .campaign-text {
+            font-size: 1.25rem; /* text-xl */
+            line-height: 1.75; /* leading-relaxed */
+            color: #111827; /* gray-900 */
+            text-align: center;
+        }
+        .campaign-highlight {
+            color: #2563eb; /* blue-600 */
+            font-weight: 700; /* font-bold */
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-700">
+<body class="bg-gray-50 text-gray-700">
 
-    <header class="bg-sky-700 text-white shadow-lg">
+    <header class="bg-blue-700 text-white shadow-lg">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
-            <h1 class="text-4xl font-bold">Analisis Interaktif RUU Perlindungan Pekerja Rumah Tangga (PPRT)</h1>
-            <p class="mt-2 text-lg">Mengurai Perjuangan, Tantangan, dan Urgensi Perlindungan PRT di Indonesia</p>
+            <h1 class="text-3xl sm:text-4xl font-bold">Sahkan RUU PPRT</h1>
+            <p class="mt-2 text-md sm:text-lg">Mengurai Perjuangan, Tantangan, dan Urgensi Perlindungan PRT</p>
         </div>
     </header>
 
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col sm:flex-row items-center justify-center sm:justify-start space-y-2 sm:space-y-0 sm:space-x-2 py-3 overflow-x-auto">
-                <a href="#beranda" class="nav-link active">🏠 Beranda</a>
-                <a href="#mengapa-mendesak" class="nav-link">❓ Mengapa Mendesak?</a>
-                <a href="#suara-perjuangan" class="nav-link">📣 Suara Perjuangan</a>
-                <a href="#ruu-pprt" class="nav-link">📜 RUU PPRT & NA</a>
-                <a href="#faktor-penghambat" class="nav-link">🚧 Faktor Penghambat</a>
-                <a href="#dampak-penundaan" class="nav-link">💔 Dampak Penundaan</a>
-                <a href="#kesimpulan-rekomendasi" class="nav-link">💡 Kesimpulan & Rekomendasi</a>
+            <div class="relative flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="#beranda" class="text-xl font-bold text-blue-600 hover:text-blue-700">RUU PPRT</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobileMenuButton" aria-label="Menu Utama" aria-expanded="false">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="mainNavLinks" class="hidden md:flex md:items-center md:space-x-2">
+                    <a href="#beranda" class="nav-link active">🏠 Beranda</a>
+                    <a href="#mengapa-mendesak" class="nav-link">❓ Urgensi</a>
+                    <a href="#suara-perjuangan" class="nav-link">📣 Perjuangan</a>
+                    <a href="#ruu-pprt" class="nav-link">📜 Substansi RUU</a>
+                    <a href="#faktor-penghambat" class="nav-link">🚧 Hambatan</a>
+                    <a href="#dampak-penundaan" class="nav-link">💔 Dampak</a>
+                    <a href="#kesimpulan-rekomendasi" class="nav-link">💡 Simpulan</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -126,16 +258,23 @@
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         <section id="beranda" class="content-section">
-            <h2 class="section-title">Selamat Datang di Analisis Interaktif RUU PPRT</h2>
+            <h2 class="section-title">Saatnya Bersama Lindungi Pekerja Rumah Tangga!</h2>
             <div class="content-card">
-                <p class="mb-4 text-lg">Selamat datang di platform analisis interaktif mengenai Rancangan Undang-Undang Perlindungan Pekerja Rumah Tangga (RUU PPRT) di Indonesia. Aplikasi ini bertujuan untuk menyajikan informasi komprehensif dari laporan "Mengurai Perjuangan dan Penundaan: Analisis Komprehensif RUU Perlindungan Pekerja Rumah Tangga di Indonesia" dengan cara yang mudah diakses dan dipahami. RUU PPRT merupakan inisiatif legislatif krusial yang telah melalui perjalanan panjang, mencerminkan kompleksitas isu dan tantangan sistemik dalam melindungi jutaan Pekerja Rumah Tangga (PRT) yang mayoritas adalah perempuan.</p>
-                <p class="mb-4">Melalui berbagai bagian dalam aplikasi ini, Anda dapat menjelajahi latar belakang urgensi RUU PPRT, suara perjuangan para PRT dan aktivis, substansi yang diusulkan dalam Naskah Akademik, faktor-faktor yang menghambat pengesahannya, dampak dari penundaan yang berlarut-larut, hingga kesimpulan dan rekomendasi kebijakan. Tujuannya adalah untuk meningkatkan pemahaman publik dan mendorong dukungan terhadap upaya perlindungan PRT yang lebih baik.</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <p class="campaign-text mb-6">
+                    Selama <span class="campaign-highlight">19+ tahun</span>, jutaan Pekerja Rumah Tangga (PRT) menanti perlindungan hukum yang adil. Mereka adalah <span class="campaign-highlight">tulang punggung keluarga</span>, namun rentan eksploitasi dan kekerasan.
+                </p>
+                <p class="campaign-text mb-6">
+                    RUU PPRT bukan hanya tentang mereka, tapi tentang <span class="campaign-highlight">KITA</span>. Tentang nilai kemanusiaan, keadilan, dan martabat bangsa.
+                </p>
+                <p class="campaign-text font-semibold mb-8">
+                    Jangan biarkan perjuangan mereka sia-sia. <span class="campaign-highlight">Dukung dan Kawal Pengesahan RUU PPRT Sekarang!</span> Suara Anda berarti.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-6">
                     <div class="highlight-stat">
-                        <span class="text-3xl block">19+</span> Tahun Perjuangan Pengesahan
+                        <span class="text-3xl block font-bold">19+</span> Tahun Perjuangan
                     </div>
                     <div class="highlight-stat">
-                        <span class="text-3xl block">Jutaan</span> PRT Terdampak di Indonesia
+                        <span class="text-3xl block font-bold">Jutaan</span> PRT Menanti
                     </div>
                 </div>
             </div>
@@ -144,10 +283,10 @@
         <section id="mengapa-mendesak" class="content-section hidden">
             <h2 class="section-title">Mengapa RUU PPRT Mendesak?</h2>
             <div class="content-card">
-                <p class="mb-4">Bagian ini menjelaskan mengapa pengesahan RUU PPRT menjadi sangat mendesak. Jutaan PRT di Indonesia, yang mayoritas adalah perempuan dan tidak sedikit anak-anak, bekerja dalam kondisi rentan tanpa perlindungan hukum memadai. Ketiadaan payung hukum ini menempatkan mereka pada risiko eksploitasi, kekerasan, dan berbagai bentuk pelanggaran hak asasi manusia.</p>
+                <p class="mb-4 leading-relaxed">Bagian ini menjelaskan mengapa pengesahan RUU PPRT menjadi sangat mendesak. Jutaan PRT di Indonesia, yang mayoritas adalah perempuan dan tidak sedikit anak-anak, bekerja dalam kondisi rentan tanpa perlindungan hukum memadai. Ketiadaan payung hukum ini menempatkan mereka pada risiko eksploitasi, kekerasan, dan berbagai bentuk pelanggaran hak asasi manusia.</p>
                 
-                <h3 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Realitas Pahit Pekerja Rumah Tangga:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-4">
+                <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Realitas Pahit Pekerja Rumah Tangga:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-4 pl-2 leading-relaxed">
                     <li>Upah sangat tidak layak, sering tidak dibayar, dan jauh di bawah standar minimum (rata-rata 20-30% UMR).</li>
                     <li>Jam kerja eksploitatif tanpa batas yang jelas.</li>
                     <li>Minimnya atau ketiadaan hak libur dan cuti.</li>
@@ -156,27 +295,27 @@
                     <li>Ketiadaan jaminan sosial (kesehatan, ketenagakerjaan).</li>
                 </ul>
 
-                <h3 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Kerentanan Khusus:</h3>
-                 <ul class="list-disc list-inside space-y-2 mb-4">
+                <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Kerentanan Khusus:</h3>
+                 <ul class="list-disc list-inside space-y-2 mb-4 pl-2 leading-relaxed">
                     <li><strong>PRT Perempuan:</strong> Mayoritas PRT adalah perempuan, menjadikan isu ini juga isu kesetaraan gender dan perlindungan perempuan.</li>
                     <li><strong>Pekerja Rumah Tangga Anak (PRTA):</strong> Sejumlah signifikan PRT adalah anak di bawah umur, yang seharusnya mendapatkan perlindungan khusus dan hak atas pendidikan serta tumbuh kembang. Data BPS 2008 menunjukkan sekitar 202.235 PRTA (11,79% dari total PRT saat itu). Penelitian ILO-IPEC di Jakarta Timur dan Bekasi menunjukkan 96,7% PRT adalah perempuan.</li>
                 </ul>
-                <p class="mb-4">Video "Mengejar Mbak Puan" dan Naskah Akademik RUU PPRT secara gamblang memaparkan kondisi ini. Pengesahan RUU PPRT diharapkan dapat memberikan pengakuan, perlindungan, dan pemenuhan hak-hak dasar bagi PRT.</p>
+                <p class="mb-4 leading-relaxed">Video "Mengejar Mbak Puan" dan Naskah Akademik RUU PPRT secara gamblang memaparkan kondisi ini. Pengesahan RUU PPRT diharapkan dapat memberikan pengakuan, perlindungan, dan pemenuhan hak-hak dasar bagi PRT.</p>
                 
                 <div class="chart-container mt-8">
                     <canvas id="prtDemographicsChart"></canvas>
                 </div>
-                <p class="text-center text-sm text-slate-600 mt-2">Diagram: Estimasi Jumlah PRT dan PRTA di Indonesia (berdasarkan data BPS 2008 yang dikutip dalam laporan).</p>
+                <p class="text-center text-sm text-gray-600 mt-2">Diagram: Estimasi Jumlah PRT dan PRTA di Indonesia (BPS 2008).</p>
             </div>
         </section>
 
         <section id="suara-perjuangan" class="content-section hidden">
             <h2 class="section-title">Suara Perjuangan PRT dan Aktivis</h2>
             <div class="content-card">
-                <p class="mb-4">Bagian ini mengangkat narasi perjuangan tak kenal lelah para PRT dan aktivis hak asasi manusia dalam menuntut pengesahan RUU PPRT, sebagaimana tergambar dalam video "Mengejar Mbak Puan" dan berbagai laporan. Perjuangan ini telah berlangsung hampir dua dekade, menunjukkan ketahanan dan harapan yang luar biasa.</p>
+                <p class="mb-4 leading-relaxed">Bagian ini mengangkat narasi perjuangan tak kenal lelah para PRT dan aktivis hak asasi manusia dalam menuntut pengesahan RUU PPRT, sebagaimana tergambar dalam video "Mengejar Mbak Puan" dan berbagai laporan. Perjuangan ini telah berlangsung hampir dua dekade, menunjukkan ketahanan dan harapan yang luar biasa.</p>
                 
-                <h3 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Aksi dan Advokasi:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-4">
+                <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Aksi dan Advokasi:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-4 pl-2 leading-relaxed">
                     <li>Aksi simbolik bertema toilet (menyindir pengabaian kebersihan dan kelayakan kerja).</li>
                     <li>Aksi mogok makan.</li>
                     <li>Pendudukan ruang rapat Badan Legislasi (Baleg) DPR RI.</li>
@@ -185,27 +324,27 @@
                     <li>Kampanye media dan publik untuk menjaga isu tetap hidup.</li>
                 </ul>
 
-                <h3 class="text-xl font-semibold text-slate-700 mt-6 mb-3">Tantangan dalam Perjuangan:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-4">
+                <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Tantangan dalam Perjuangan:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-4 pl-2 leading-relaxed">
                     <li>Proses legislasi yang berlarut-larut, RUU seolah "disandera" kepentingan politik.</li>
                     <li>Pengalaman perundungan dan pelecehan verbal dari beberapa oknum anggota DPR.</li>
                     <li>Respons minim bahkan represif dari aparat terhadap aksi damai.</li>
                     <li>Risiko kehilangan pekerjaan dan pendapatan bagi PRT yang aktif bersuara.</li>
                     <li>"Kelelahan advokasi" (*advocacy fatigue*) setelah perjuangan panjang.</li>
                 </ul>
-                <p class="italic">"19 tahun itu menuntut stamina hati bagaimana kita harus terus mumpuk harapan bahwa satu saat itu akan terjadi undang-undang itu akan ada..."</p> (Kutipan dari video "Mengejar Mbak Puan")
+                <p class="italic leading-relaxed">"19 tahun itu menuntut stamina hati bagaimana kita harus terus mumpuk harapan bahwa satu saat itu akan terjadi undang-undang itu akan ada..."</p> (Kutipan dari video "Mengejar Mbak Puan")
             </div>
         </section>
 
         <section id="ruu-pprt" class="content-section hidden">
             <h2 class="section-title">Substansi RUU PPRT & Naskah Akademik</h2>
             <div class="content-card">
-                <p class="mb-4">Naskah Akademik (NA) RUU PPRT menyediakan landasan filosofis, sosiologis, dan yuridis yang kuat untuk RUU ini. Bagian ini merangkum beberapa poin penting dari NA dan bagaimana RUU PPRT dirancang untuk mengatasi masalah yang dihadapi PRT.</p>
+                <p class="mb-4 leading-relaxed">Naskah Akademik (NA) RUU PPRT menyediakan landasan filosofis, sosiologis, dan yuridis yang kuat untuk RUU ini. Bagian ini merangkum beberapa poin penting dari NA dan bagaimana RUU PPRT dirancang untuk mengatasi masalah yang dihadapi PRT.</p>
 
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <h3 class="text-xl font-semibold text-slate-700 mb-3">Masalah Utama yang Dihadapi PRT (Identifikasi NA):</h3>
-                        <ul class="list-disc list-inside space-y-1 text-sm">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-3">Masalah Utama PRT (Identifikasi NA):</h3>
+                        <ul class="list-disc list-inside space-y-1 text-sm leading-relaxed pl-2">
                             <li>Upah rendah/tidak dibayar</li>
                             <li>Jam kerja tanpa batasan</li>
                             <li>Fasilitas kerja tidak memadai</li>
@@ -216,8 +355,8 @@
                         </ul>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-slate-700 mb-3">Solusi yang Ditawarkan dalam RUU PPRT (berdasarkan NA):</h3>
-                        <ul class="list-disc list-inside space-y-1 text-sm">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-3">Solusi dalam RUU PPRT (NA):</h3>
+                        <ul class="list-disc list-inside space-y-1 text-sm leading-relaxed pl-2">
                             <li>Pengakuan PRT sebagai "Pekerja Rumah Tangga"</li>
                             <li>Perjanjian kerja tertulis (hak & kewajiban jelas)</li>
                             <li>Pengaturan upah minimum & tunjangan hari raya</li>
@@ -231,31 +370,31 @@
                     </div>
                 </div>
 
-                <h3 class="text-xl font-semibold text-slate-700 mt-8 mb-3">Poin Kunci Tambahan dari Naskah Akademik:</h3>
-                <ul class="list-disc list-inside space-y-2">
+                <h3 class="text-xl font-semibold text-gray-700 mt-8 mb-3">Poin Kunci Tambahan dari Naskah Akademik:</h3>
+                <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
                     <li><strong>Landasan Filosofis:</strong> Pengakuan martabat manusia dan pekerja, keadilan sosial.</li>
                     <li><strong>Landasan Sosiologis:</strong> Mengatasi kerentanan sosial dan ekonomi PRT, kontribusi PRT pada ekonomi keluarga dan nasional (*care economy*).</li>
                     <li><strong>Landasan Yuridis:</strong> Memenuhi amanat konstitusi, harmonisasi dengan UU lain (UU Ketenagakerjaan, UU PKDRT, UU Perlindungan Anak), dan standar internasional (Konvensi ILO).</li>
                     <li><strong>Kepentingan Pemberi Kerja:</strong> RUU juga bertujuan memberikan kepastian hukum bagi pemberi kerja, standar kompetensi PRT, dan mengurangi potensi konflik.</li>
                 </ul>
-                <p class="mt-4">Naskah Akademik secara komprehensif menguraikan urgensi dan substansi RUU PPRT, menjadikannya dasar yang kuat untuk pembentukan undang-undang yang adil dan melindungi.</p>
+                <p class="mt-4 leading-relaxed">Naskah Akademik secara komprehensif menguraikan urgensi dan substansi RUU PPRT, menjadikannya dasar yang kuat untuk pembentukan undang-undang yang adil dan melindungi.</p>
             </div>
         </section>
 
         <section id="faktor-penghambat" class="content-section hidden">
             <h2 class="section-title">Faktor Penghambat Pengesahan RUU PPRT</h2>
             <div class="content-card">
-                <p class="mb-6">Penundaan pengesahan RUU PPRT selama hampir dua dekade disebabkan oleh interaksi berbagai faktor kompleks. Bagian ini menguraikan beberapa faktor utama yang diduga menjadi penghambat.</p>
+                <p class="mb-6 leading-relaxed">Penundaan pengesahan RUU PPRT selama hampir dua dekade disebabkan oleh interaksi berbagai faktor kompleks. Bagian ini menguraikan beberapa faktor utama yang diduga menjadi penghambat.</p>
                 
-                <div class="mb-4">
+                <div class="mb-4 flex flex-wrap">
                     <button class="tab-button active" data-tab="ekonomi">💰 Ekonomi</button>
                     <button class="tab-button" data-tab="politik">🏛️ Politik</button>
                     <button class="tab-button" data-tab="internasional">🌍 Internasional</button>
                 </div>
 
                 <div id="ekonomi" class="tab-content">
-                    <h3 class="text-lg font-semibold text-slate-700 mb-2">Minimnya *Multiplier Effect* yang Dirasakan atau Dikhawatirkan?</h3>
-                    <ul class="list-disc list-inside space-y-2">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Minimnya *Multiplier Effect* yang Dirasakan atau Dikhawatirkan?</h3>
+                    <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
                         <li>Persepsi bahwa formalisasi PRT akan menimbulkan biaya signifikan bagi rumah tangga pemberi kerja.</li>
                         <li>Pekerjaan PRT sering tidak dilihat sebagai sektor produktif yang menghasilkan nilai tambah langsung ke PDB.</li>
                         <li>Kekhawatiran RUU tidak memberikan *multiplier effect* sebanding investasi lain.</li>
@@ -265,8 +404,8 @@
                 </div>
 
                 <div id="politik" class="tab-content hidden">
-                    <h3 class="text-lg font-semibold text-slate-700 mb-2">Defisit Mobilisasi Massa dan Tekanan Publik, atau Resistensi Elit?</h3>
-                    <ul class="list-disc list-inside space-y-2">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Defisit Mobilisasi Massa dan Tekanan Publik, atau Resistensi Elit?</h3>
+                    <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
                         <li>Kurangnya *political will* dari pimpinan dan sebagian anggota DPR.</li>
                         <li>Dugaan konflik kepentingan (anggota DPR sebagai pemberi kerja).</li>
                         <li>Prioritas politik yang berbeda (RUU lain seperti IKN, Minerba, lebih cepat disahkan).</li>
@@ -276,12 +415,12 @@
                     <div class="chart-container mt-6">
                         <canvas id="ruuComparisonChart"></canvas>
                     </div>
-                     <p class="text-center text-sm text-slate-600 mt-2">Diagram Ilustratif: Perbandingan Estimasi Waktu Pembahasan RUU.</p>
+                     <p class="text-center text-sm text-gray-600 mt-2">Diagram Ilustratif: Perbandingan Estimasi Waktu Pembahasan RUU.</p>
                 </div>
 
                 <div id="internasional" class="tab-content hidden">
-                    <h3 class="text-lg font-semibold text-slate-700 mb-2">Minimnya Dorongan Global yang Efektif?</h3>
-                    <ul class="list-disc list-inside space-y-2">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Minimnya Dorongan Global yang Efektif?</h3>
+                    <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
                         <li>Dorongan dari ILO (Konvensi 189), HRW, Amnesty International, dan mekanisme HAM PBB.</li>
                         <li>Indonesia belum meratifikasi Konvensi ILO No. 189.</li>
                         <li>Dorongan internasional bersifat normatif dan reputasional, daya paksa terbatas jika berhadapan dengan kepentingan domestik kuat.</li>
@@ -294,42 +433,34 @@
         <section id="dampak-penundaan" class="content-section hidden">
             <h2 class="section-title">Dampak Penundaan Pengesahan RUU PPRT</h2>
             <div class="content-card">
-                <p class="mb-6">Penundaan pengesahan RUU PPRT membawa konsekuensi sangat merugikan bagi jutaan PRT, melanggengkan kondisi kerja eksploitatif, meningkatkan kerentanan, dan memperburuk marginalisasi.</p>
+                <p class="mb-6 leading-relaxed">Penundaan pengesahan RUU PPRT membawa konsekuensi sangat merugikan bagi jutaan PRT, melanggengkan kondisi kerja eksploitatif, meningkatkan kerentanan, dan memperburuk marginalisasi.</p>
                 
-                <div id="accordion-dampak">
+                <div id="accordion-dampak" class="space-y-2">
                     <div>
-                        <button class="accordion-button" data-target="dampak-eksploitasi">1. Pelanggengan Kondisi Kerja Eksploitatif</button>
-                        <div id="dampak-eksploitasi" class="accordion-content">
-                            <p>Ketiadaan aturan jelas mengenai upah layak, batas jam kerja manusiawi, hak cuti, dan jaminan sosial. PRT terus bekerja dalam ketidakpastian dengan upah rendah dan jam kerja panjang.</p>
-                        </div>
+                        <button class="accordion-button" data-target="dampak-eksploitasi"><span>1. Pelanggengan Kondisi Kerja Eksploitatif</span><span class="icon"></span></button>
+                        <div id="dampak-eksploitasi" class="accordion-content"><p class="leading-relaxed">Ketiadaan aturan jelas mengenai upah layak, batas jam kerja manusiawi, hak cuti, dan jaminan sosial. PRT terus bekerja dalam ketidakpastian dengan upah rendah dan jam kerja panjang.</p></div>
                     </div>
                     <div>
-                        <button class="accordion-button" data-target="dampak-kekerasan">2. Kerentanan terhadap Kekerasan dan Pelecehan</button>
-                        <div id="dampak-kekerasan" class="accordion-content">
-                            <p>PRT sangat rentan terhadap kekerasan fisik, psikis, ekonomi, dan seksual. Lingkup kerja privat dan terisolasi mempersulit deteksi dan intervensi. UU PKDRT belum optimal melindungi.</p>
-                        </div>
+                        <button class="accordion-button" data-target="dampak-kekerasan"><span>2. Kerentanan terhadap Kekerasan dan Pelecehan</span><span class="icon"></span></button>
+                        <div id="dampak-kekerasan" class="accordion-content"><p class="leading-relaxed">PRT sangat rentan terhadap kekerasan fisik, psikis, ekonomi, dan seksual. Lingkup kerja privat dan terisolasi mempersulit deteksi dan intervensi. UU PKDRT belum optimal melindungi.</p></div>
                     </div>
                     <div>
-                        <button class="accordion-button" data-target="dampak-hukum">3. Ketidakpastian Hukum dan Akses Keadilan Terbatas</button>
-                        <div id="dampak-hukum" class="accordion-content">
-                            <p>Kesulitan mencari keadilan saat terjadi sengketa atau tindak pidana. Dominasi perjanjian kerja lisan memperlemah posisi PRT. Mekanisme penyelesaian sengketa belum memadai.</p>
-                        </div>
+                        <button class="accordion-button" data-target="dampak-hukum"><span>3. Ketidakpastian Hukum dan Akses Keadilan Terbatas</span><span class="icon"></span></button>
+                        <div id="dampak-hukum" class="accordion-content"><p class="leading-relaxed">Kesulitan mencari keadilan saat terjadi sengketa atau tindak pidana. Dominasi perjanjian kerja lisan memperlemah posisi PRT. Mekanisme penyelesaian sengketa belum memadai.</p></div>
                     </div>
                      <div>
-                        <button class="accordion-button" data-target="dampak-perempuan-anak">4. Dampak pada PRT Perempuan dan Anak (PRTA)</button>
+                        <button class="accordion-button" data-target="dampak-perempuan-anak"><span>4. Dampak pada PRT Perempuan dan Anak (PRTA)</span><span class="icon"></span></button>
                         <div id="dampak-perempuan-anak" class="accordion-content">
-                            <p>Melanggengkan diskriminasi gender karena mayoritas PRT adalah perempuan. PRTA menghadapi eksploitasi ganda, kehilangan hak atas pendidikan dan tumbuh kembang optimal. Praktik mempekerjakan PRTA seringkali merupakan "eksploitasi terselubung".</p>
+                            <p class="leading-relaxed">Melanggengkan diskriminasi gender karena mayoritas PRT adalah perempuan. PRTA menghadapi eksploitasi ganda, kehilangan hak atas pendidikan dan tumbuh kembang optimal. Praktik mempekerjakan PRTA seringkali merupakan "eksploitasi terselubung".</p>
                             <div class="chart-container mt-4">
                                 <canvas id="prtGenderChart"></canvas>
                             </div>
-                            <p class="text-center text-sm text-slate-600 mt-2">Diagram: Mayoritas PRT adalah Perempuan (Estimasi 90% berdasarkan laporan).</p>
+                            <p class="text-center text-sm text-gray-600 mt-2">Diagram: Mayoritas PRT adalah Perempuan (~90%).</p>
                         </div>
                     </div>
                     <div>
-                        <button class="accordion-button" data-target="dampak-marginalisasi">5. Marginalisasi Sosial dan Ekonomi</button>
-                        <div id="dampak-marginalisasi" class="accordion-content">
-                            <p>PRT tidak dianggap sebagai "pekerja" dengan hak normatif, melanggengkan stigma. Ketiadaan akses jaminan sosial membuat PRT rentan terhadap guncangan ekonomi. Negara membiarkan jutaan warganya dalam kondisi marginal, menciptakan "kewargaan kelas dua".</p>
-                        </div>
+                        <button class="accordion-button" data-target="dampak-marginalisasi"><span>5. Marginalisasi Sosial dan Ekonomi</span><span class="icon"></span></button>
+                        <div id="dampak-marginalisasi" class="accordion-content"><p class="leading-relaxed">PRT tidak dianggap sebagai "pekerja" dengan hak normatif, melanggengkan stigma. Ketiadaan akses jaminan sosial membuat PRT rentan terhadap guncangan ekonomi. Negara membiarkan jutaan warganya dalam kondisi marginal, menciptakan "kewargaan kelas dua".</p></div>
                     </div>
                 </div>
             </div>
@@ -338,16 +469,16 @@
         <section id="kesimpulan-rekomendasi" class="content-section hidden">
             <h2 class="section-title">Kesimpulan dan Rekomendasi</h2>
             <div class="content-card">
-                <h3 class="text-xl font-semibold text-slate-700 mb-3">Kesimpulan Utama:</h3>
-                <p class="mb-4">Pengesahan RUU PPRT adalah langkah krusial dan mendesak. Argumen akademis yang mendukung telah komprehensif, dan kebutuhan empiris di lapangan sangat nyata. Penundaan disebabkan oleh faktor ekonomi, politik, dan kurang efektifnya dorongan internasional, yang berakibat pada pelanggengan eksploitasi dan marginalisasi PRT.</p>
-                <p class="mb-6">Ini bukan hanya persoalan legislasi, tetapi keharusan moral dan konstitusional negara untuk melindungi warganya, mengakui martabat PRT, dan memenuhi kewajiban HAM.</p>
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Kesimpulan Utama:</h3>
+                <p class="mb-4 leading-relaxed">Pengesahan RUU PPRT adalah langkah krusial dan mendesak. Argumen akademis yang mendukung telah komprehensif, dan kebutuhan empiris di lapangan sangat nyata. Penundaan disebabkan oleh faktor ekonomi, politik, dan kurang efektifnya dorongan internasional, yang berakibat pada pelanggengan eksploitasi dan marginalisasi PRT.</p>
+                <p class="mb-6 leading-relaxed">Ini bukan hanya persoalan legislasi, tetapi keharusan moral dan konstitusional negara untuk melindungi warganya, mengakui martabat PRT, dan memenuhi kewajiban HAM.</p>
 
-                <h3 class="text-xl font-semibold text-slate-700 mb-3">Rekomendasi Umum (Tingkat Tinggi):</h3>
-                <div id="accordion-rekomendasi">
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Rekomendasi Umum (Tingkat Tinggi):</h3>
+                <div id="accordion-rekomendasi" class="space-y-2">
                     <div>
-                        <button class="accordion-button" data-target="rekomendasi-legislatif">Untuk Legislatif (DPR RI)</button>
+                        <button class="accordion-button" data-target="rekomendasi-legislatif"><span>Untuk Legislatif (DPR RI)</span><span class="icon"></span></button>
                         <div id="rekomendasi-legislatif" class="accordion-content">
-                            <ul class="list-disc list-inside space-y-2">
+                            <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
                                 <li>Jadikan pembahasan dan pengesahan RUU PPRT prioritas utama dengan target waktu jelas.</li>
                                 <li>Pimpinan DPR menunjukkan *political will* kuat untuk akselerasi.</li>
                                 <li>Pastikan substansi RUU komprehensif, melindungi PRT & pemberi kerja seimbang, sejalan standar internasional (Konvensi ILO 189).</li>
@@ -355,9 +486,9 @@
                         </div>
                     </div>
                      <div>
-                        <button class="accordion-button" data-target="rekomendasi-eksekutif">Untuk Eksekutif (Pemerintah)</button>
+                        <button class="accordion-button" data-target="rekomendasi-eksekutif"><span>Untuk Eksekutif (Pemerintah)</span><span class="icon"></span></button>
                         <div id="rekomendasi-eksekutif" class="accordion-content">
-                            <ul class="list-disc list-inside space-y-2">
+                            <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
                                 <li>Berikan tekanan politik positif dan dukungan teknis ke DPR.</li>
                                 <li>Siapkan infrastruktur dan mekanisme implementasi efektif pasca-pengesahan (sosialisasi, pengawasan, anggaran).</li>
                                 <li>Pastikan koordinasi antar kementerian/lembaga terkait.</li>
@@ -365,9 +496,9 @@
                         </div>
                     </div>
                     <div>
-                        <button class="accordion-button" data-target="rekomendasi-masyarakat">Untuk Masyarakat Sipil dan Media</button>
+                        <button class="accordion-button" data-target="rekomendasi-masyarakat"><span>Untuk Masyarakat Sipil dan Media</span><span class="icon"></span></button>
                         <div id="rekomendasi-masyarakat" class="accordion-content">
-                            <ul class="list-disc list-inside space-y-2">
+                            <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
                                 <li>Lanjutkan dan intensifkan advokasi, kampanye publik, dan edukasi.</li>
                                 <li>Tingkatkan kesadaran publik tentang nilai ekonomi dan sosial *care work*.</li>
                                 <li>Lakukan pengawasan ketat terhadap proses legislasi dan implementasi.</li>
@@ -375,25 +506,27 @@
                         </div>
                     </div>
                     <div>
-                        <button class="accordion-button" data-target="rekomendasi-internasional">Untuk Komunitas Internasional</button>
+                        <button class="accordion-button" data-target="rekomendasi-internasional"><span>Untuk Komunitas Internasional</span><span class="icon"></span></button>
                         <div id="rekomendasi-internasional" class="accordion-content">
-                            <ul class="list-disc list-inside space-y-2">
+                            <ul class="list-disc list-inside space-y-2 pl-2 leading-relaxed">
                                 <li>Terus pantau perkembangan dan berikan dukungan teknis serta normatif.</li>
                                 <li>Gunakan forum internasional untuk mendorong Indonesia memenuhi komitmen perlindungan pekerja.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <p class="mt-6 italic">Pengesahan RUU PPRT adalah tentang perubahan paradigma sosial-budaya dalam memandang kerja domestik dan menghargai pekerjanya. Keberhasilan implementasi bergantung pada sosialisasi dan edukasi masif.</p>
+                <p class="mt-6 italic leading-relaxed">Pengesahan RUU PPRT adalah tentang perubahan paradigma sosial-budaya dalam memandang kerja domestik dan menghargai pekerjanya. Keberhasilan implementasi bergantung pada sosialisasi dan edukasi masif.</p>
             </div>
         </section>
     </main>
 
-    <footer class="bg-slate-800 text-slate-300 py-8 text-center">
+    <footer class="bg-gray-800 text-gray-400 py-10 text-center">
         <div class="container mx-auto px-4">
-            <p>Sahkan RUU PRT!</p>
-            <p class="text-sm">Dalam Rangka Memenuhi Penugasan Matkul Hukum Perburuhan. Dosen Syahrul Sajidin, S.H., M.H.</p>
-            <p class="text-xs mt-2">By Deva A. Supardi</p>
+            <p class="text-lg font-semibold text-white mb-2">Sahkan RUU PRT!</p>
+            <p class="text-sm footer-text">Dalam Rangka Memenuhi Penugasan Matkul Hukum Perburuhan.</p>
+            <p class="text-sm footer-text mb-1">Dosen: Syahrul Sajidin, S.H., M.H.</p>
+            <p class="text-xs footer-text mt-4">By Deva A. Supardi</p>
+        
         </div>
     </footer>
 
@@ -404,6 +537,20 @@
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
             const accordionButtons = document.querySelectorAll('.accordion-button');
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mainNavLinks = document.getElementById('mainNavLinks');
+
+            // Mobile Menu Toggle
+            if (mobileMenuButton && mainNavLinks) {
+                mobileMenuButton.addEventListener('click', function() {
+                    const isExpanded = mainNavLinks.classList.toggle('open');
+                    this.setAttribute('aria-expanded', isExpanded);
+                    // Change icon based on state (optional, if you have different SVGs)
+                    this.innerHTML = isExpanded ? 
+                        `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>` : 
+                        `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>`;
+                });
+            }
 
             // Navigation
             navLinks.forEach(link => {
@@ -412,17 +559,26 @@
                     const targetId = this.getAttribute('href').substring(1);
 
                     sections.forEach(section => {
-                        if (section.id === targetId) {
-                            section.classList.remove('hidden');
-                        } else {
-                            section.classList.add('hidden');
-                        }
+                        section.classList.toggle('hidden', section.id !== targetId);
                     });
 
                     navLinks.forEach(navLink => navLink.classList.remove('active'));
                     this.classList.add('active');
                     
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    // Close mobile menu after click
+                    if (mainNavLinks && mainNavLinks.classList.contains('open')) {
+                        mainNavLinks.classList.remove('open');
+                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                        mobileMenuButton.innerHTML = `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>`;
+                    }
+                    
+                    // Smooth scroll to section, considering sticky nav height
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        const navHeight = document.querySelector('nav').offsetHeight;
+                        const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset - navHeight - 20; // 20px offset
+                         window.scrollTo({ top: sectionTop, behavior: 'smooth' });
+                    }
                 });
             });
 
@@ -430,16 +586,10 @@
             tabButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const targetTab = this.dataset.tab;
-
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
-
                     tabContents.forEach(content => {
-                        if (content.id === targetTab) {
-                            content.classList.remove('hidden');
-                        } else {
-                            content.classList.add('hidden');
-                        }
+                        content.classList.toggle('hidden', content.id !== targetTab);
                     });
                 });
             });
@@ -449,149 +599,134 @@
                 button.addEventListener('click', function() {
                     const targetId = this.dataset.target;
                     const targetContent = document.getElementById(targetId);
+                    const isOpen = targetContent.style.display === 'block';
                     
-                    // Optional: Close other accordions in the same group
-                    // const parentAccordion = this.closest('[id^="accordion-"]');
-                    // if (parentAccordion) {
-                    //     parentAccordion.querySelectorAll('.accordion-content').forEach(ac => {
-                    //         if (ac.id !== targetId) ac.style.display = 'none';
-                    //     });
-                    // }
-
-                    if (targetContent.style.display === 'block') {
-                        targetContent.style.display = 'none';
-                    } else {
-                        targetContent.style.display = 'block';
-                    }
+                    targetContent.style.display = isOpen ? 'none' : 'block';
+                    this.classList.toggle('open', !isOpen);
                 });
             });
 
             // Chart.js Implementations
-            // Chart 1: PRT Demographics (Mengapa Mendesak)
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: { size: 11 },
+                            color: '#4b5563' // gray-600
+                        }
+                    },
+                    title: {
+                        display: true,
+                        font: { size: 14, weight: 'bold' },
+                        color: '#1f2937', // gray-800
+                        padding: { top: 10, bottom: 15 }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.75)',
+                        titleFont: { size: 13 },
+                        bodyFont: { size: 12 },
+                        padding: 10,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toLocaleString('id-ID');
+                                } else if (context.parsed !== null && typeof context.parsed === 'number') {
+                                     label += context.parsed.toLocaleString('id-ID') + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e5e7eb' }, // gray-200
+                        ticks: { 
+                            color: '#4b5563', // gray-600
+                            font: { size: 11 },
+                            callback: function(value) { return value.toLocaleString('id-ID'); }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { 
+                            color: '#4b5563', // gray-600
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            };
+            
+            const doughnutChartOptions = JSON.parse(JSON.stringify(chartOptions)); // Deep copy
+            delete doughnutChartOptions.scales; // Doughnut charts don't use scales like bar charts
+
             const prtDemographicsCtx = document.getElementById('prtDemographicsChart');
             if (prtDemographicsCtx) {
+                const demogChartOptions = JSON.parse(JSON.stringify(chartOptions));
+                demogChartOptions.plugins.title.text = 'Estimasi Jumlah PRT dan PRTA (2008)';
                 new Chart(prtDemographicsCtx, {
                     type: 'bar',
                     data: {
                         labels: ['Total PRT (2008)', 'PRTA (2008)'],
                         datasets: [{
                             label: 'Jumlah Jiwa',
-                            data: [1714437, 202235], // Data dari laporan (BPS 2008)
-                            backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 99, 132, 0.6)'],
-                            borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
-                            borderWidth: 1
+                            data: [1714437, 202235],
+                            backgroundColor: ['rgba(59, 130, 246, 0.7)', 'rgba(239, 68, 68, 0.7)'], // blue-500, red-500
+                            borderColor: ['#2563eb', '#dc2626'], // blue-600, red-600
+                            borderWidth: 1.5,
+                            borderRadius: 4
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toLocaleString('id-ID');
-                                    }
-                                }
-                            }
-                        },
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Estimasi Jumlah PRT dan PRTA (2008)'
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        if (context.parsed.y !== null) {
-                                            label += context.parsed.y.toLocaleString('id-ID');
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    options: demogChartOptions
                 });
             }
 
-            // Chart 2: RUU Comparison (Faktor Penghambat - Politik)
             const ruuComparisonCtx = document.getElementById('ruuComparisonChart');
             if (ruuComparisonCtx) {
+                const compChartOptions = JSON.parse(JSON.stringify(chartOptions));
+                compChartOptions.indexAxis = 'y';
+                compChartOptions.plugins.title.text = 'Ilustrasi Waktu Pembahasan RUU';
+                compChartOptions.scales.x.title = { display: true, text: 'Tahun', color: '#4b5563', font: {size: 11}};
                 new Chart(ruuComparisonCtx, {
                     type: 'bar',
                     data: {
                         labels: ['RUU PPRT', 'RUU Prioritas Lain (Contoh)'],
                         datasets: [{
                             label: 'Estimasi Waktu Pembahasan (Tahun)',
-                            data: [19, 1], // Data ilustratif
-                            backgroundColor: ['rgba(255, 159, 64, 0.6)', 'rgba(75, 192, 192, 0.6)'],
-                            borderColor: ['rgba(255, 159, 64, 1)', 'rgba(75, 192, 192, 1)'],
-                            borderWidth: 1
+                            data: [19, 1],
+                            backgroundColor: ['rgba(245, 158, 11, 0.7)', 'rgba(16, 185, 129, 0.7)'], // amber-500, emerald-500
+                            borderColor: ['#d97706', '#059669'], // amber-600, emerald-600
+                            borderWidth: 1.5,
+                            borderRadius: 4
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        indexAxis: 'y',
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                title: { display: true, text: 'Tahun' }
-                            }
-                        },
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Perbandingan Ilustratif Waktu Pembahasan RUU'
-                            }
-                        }
-                    }
+                    options: compChartOptions
                 });
             }
             
-            // Chart 3: PRT Gender (Dampak Penundaan)
             const prtGenderCtx = document.getElementById('prtGenderChart');
             if (prtGenderCtx) {
+                const genderChartOptions = JSON.parse(JSON.stringify(doughnutChartOptions));
+                genderChartOptions.plugins.title.text = 'Estimasi Komposisi Gender PRT (~90% Perempuan)';
                  new Chart(prtGenderCtx, {
                     type: 'doughnut',
                     data: {
                         labels: ['Perempuan', 'Laki-laki'],
                         datasets: [{
                             label: 'Komposisi Gender PRT',
-                            data: [90, 10], // Estimasi 90% perempuan
-                            backgroundColor: ['rgba(255, 99, 132, 0.7)', 'rgba(54, 162, 235, 0.7)'],
-                            hoverOffset: 4
+                            data: [90, 10], 
+                            backgroundColor: ['rgba(236, 72, 153, 0.7)', 'rgba(59, 130, 246, 0.7)'], // pink-500, blue-500
+                            borderColor: ['#db2777', '#2563eb'], // pink-600, blue-600
+                            borderWidth: 1.5,
+                            hoverOffset: 8
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Estimasi Komposisi Gender PRT (~90% Perempuan)'
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        if (context.parsed !== null) {
-                                            label += context.parsed + '%';
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    options: genderChartOptions
                 });
             }
         });
